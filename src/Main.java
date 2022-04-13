@@ -1,9 +1,14 @@
 import espacoDeEstados.*;
 import estrategiasDeBusca.cega.*;
+import estrategiasDeBusca.heuristica.AStar;
+import estrategiasDeBusca.heuristica.BestFirst;
+import estrategiasDeBusca.heuristica.BuscaInformada;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -26,12 +31,60 @@ public class Main {
 		puzzleFinal.setCusto(0);
 		puzzleFinal.setAvaliacao(0);
 
-		buscaEmLargura(puzzleInicial, puzzleFinal);
-		buscaEmProfundidade(puzzleInicial, puzzleFinal);
-		buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, 10);
-		buscaEmProfundidadeLimitadaInterativa(puzzleInicial, puzzleFinal);
+		Scanner menu = new Scanner(System.in);
 
-		System.exit(0);
+		while (true) {
+
+			System.out.print("+-------------------------------------------------+\n");
+			System.out.print("|                     Buscas                      |\n");
+			System.out.print("+-------------------------------------------------+\n");
+			System.out.print("| 1 - Busca em Largura     						|\n");
+			System.out.print("| 2 - Busca em Profundidade          				|\n");
+			System.out.print("| 3 - Busca em Profundidade Limitada          	|\n");
+			System.out.print("| 4 - Busca em Profundidade Limitada Interativa   |\n");
+			System.out.print("| 5 - Busca A*                                    |\n");
+			System.out.print("| 6 - Busca Best First                            |\n");
+			System.out.print("| 7 - Sair              							|\n");
+			System.out.print("+-------------------------------------------------+\n");
+			System.out.print("\n");
+			System.out.print("Digite uma opção: ");
+
+			int opcao = menu.nextInt();
+
+			if (opcao == 7) {
+				break;
+			}
+
+			switch (opcao) {
+				case 1:
+					buscaEmLargura(puzzleInicial, puzzleFinal);
+					break;
+
+				case 2:
+					buscaEmProfundidade(puzzleInicial, puzzleFinal);
+					break;
+
+				case 3:
+					buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, 10);
+					break;
+
+				case 4:
+					buscaEmProfundidadeLimitadaInterativa(puzzleInicial, puzzleFinal);
+					break;
+
+				case 5:
+					buscaAEstrela(puzzleInicial, puzzleFinal);
+					break;
+
+				case 6:
+					buscaBestFirst(puzzleInicial, puzzleFinal);
+					break;
+
+				default:
+					System.out.print("\nOpção Inválida\n\n");
+					break;
+			}
+		}
 	}
 
 	private static void buscaEmProfundidadeLimitada(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal, int limite) {
@@ -40,9 +93,8 @@ public class Main {
 		buscaEmProfundidadeLimitada.setInicio(puzzleInicial);
 		buscaEmProfundidadeLimitada.setObjetivo(puzzleFinal);
 		buscaEmProfundidadeLimitada.buscar();
-		for(Estado e : buscaEmProfundidadeLimitada.getCaminhoSolucao()) {
-			System.out.println(e);
-		}
+
+		printCaminho(buscaEmProfundidadeLimitada.getCaminhoSolucao());
 	}
 
 	private static void buscaEmProfundidade(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal) {
@@ -50,9 +102,8 @@ public class Main {
 		buscaEmProfundidade.setInicio(puzzleInicial);
 		buscaEmProfundidade.setObjetivo(puzzleFinal);
 		buscaEmProfundidade.buscar();
-		for(Estado e : buscaEmProfundidade.getCaminhoSolucao()) {
-			System.out.println(e);
-		}
+
+		printCaminho(buscaEmProfundidade.getCaminhoSolucao());
 	}
 
 	private static void buscaEmProfundidadeLimitadaInterativa(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal) throws IOException {
@@ -77,9 +128,32 @@ public class Main {
 		busca.setInicio(puzzleInicial);
 		busca.setObjetivo(puzzleFinal);
 		busca.buscar();
-		for(Estado e : busca.getCaminhoSolucao()) {
+
+		printCaminho(busca.getCaminhoSolucao());
+	}
+
+	private static void buscaAEstrela(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal){
+		AStar buscaAEstrela = new AStar();
+		buscaAEstrela.setInicio(puzzleInicial);
+		buscaAEstrela.setObjetivo(puzzleFinal);
+		buscaAEstrela.buscar();
+
+		printCaminho(buscaAEstrela.getCaminhoSolucao());
+	}
+
+	private static void buscaBestFirst(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal){
+		BestFirst bestFirst = new BestFirst();
+		bestFirst.setInicio(puzzleInicial);
+		bestFirst.setObjetivo(puzzleFinal);
+
+		bestFirst.buscar();
+
+		printCaminho(bestFirst.getCaminhoSolucao());
+	}
+
+	private static void printCaminho(List<Estado<?>> caminhos) {
+		for(Estado e : caminhos) {
 			System.out.println(e);
 		}
 	}
-
 }
