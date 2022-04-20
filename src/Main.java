@@ -27,7 +27,7 @@ public class Main {
 		puzzleInicial.setCusto(0);
 		puzzleInicial.setAvaliacao( puzzleInicial.heuristica(Puzzle8.TABULEIRO_ORGANIZADO) );
 
-		char[] cfgFim = {'2','3',' ','7','4','1','5','8','6'};
+		char[] cfgFim = {'1','2','3','4','5','6','7','8',' '};
 		Puzzle8 puzzleFinal = new Puzzle8();
 		puzzleFinal.setEstado(cfgFim);
 		puzzleFinal.setCusto(0);
@@ -115,19 +115,19 @@ public class Main {
 
 	private static void buscaEmProfundidadeLimitadaInterativa(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal) {
 
-		Scanner scanner = new Scanner(System.in);
+		int index = 0;
 
-		System.out.println();
-		System.out.println("BUSCA EM PROFUNDIDADE LIMITADA INTERATIVA\n");
-
-		System.out.print("Digite o valor inicial: ");
-		int valorInicial = scanner.nextInt();
-
-		System.out.print("Digite o valor final: ");
-		int valorFinal = scanner.nextInt();
-
-		for(int i = valorInicial; i <= valorFinal; i++){
-			buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, i);
+		while (true) {
+			try
+			{
+				System.out.println("Tentando com o limite: " + index);
+				buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, index);
+				break;
+			}
+			catch (Exception e)
+			{
+				index++;
+			}
 		}
 	}
 
