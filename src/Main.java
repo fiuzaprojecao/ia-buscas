@@ -70,7 +70,7 @@ public class Main {
 					break;
 
 				case 3:
-					buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, 10);
+					buscaEmProfundidadeLimitada(puzzleInicial, puzzleFinal, 20);
 					break;
 
 				case 4:
