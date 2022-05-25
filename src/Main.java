@@ -6,6 +6,7 @@ import estrategiasDeBusca.cega.BuscaEmProfundidade;
 import estrategiasDeBusca.cega.BuscaEmProfundidadeLimitada;
 import estrategiasDeBusca.heuristica.AStar;
 import estrategiasDeBusca.heuristica.BestFirst;
+import estrategiasDeBusca.heuristica.HillClimbing;
 
 import java.util.List;
 import java.util.Scanner;
@@ -21,13 +22,14 @@ public class Main {
 		char[] cfgIni = {'7','2','3','4',' ','1','5','8','6'}; // OutOfMemory
 		*/
 
-		char[] cfgIni = {'2','3',' ','7','4','1','5','8','6'};
+		char[] cfgIni = {'2',' ','3','1','4','6','7','5','8'};
+		char[] cfgFim = {'1','2','3','4','5','6','7','8',' '};
+
 		Puzzle8 puzzleInicial = new Puzzle8();
 		puzzleInicial.setEstado(cfgIni);
 		puzzleInicial.setCusto(0);
 		puzzleInicial.setAvaliacao( puzzleInicial.heuristica(Puzzle8.TABULEIRO_ORGANIZADO) );
 
-		char[] cfgFim = {'1','2','3','4','5','6','7','8',' '};
 		Puzzle8 puzzleFinal = new Puzzle8();
 		puzzleFinal.setEstado(cfgFim);
 		puzzleFinal.setCusto(0);
@@ -51,14 +53,15 @@ public class Main {
 			System.out.println("| 4 - Busca em Profundidade Limitada Interativa   |");
 			System.out.println("| 5 - Busca A*                                    |");
 			System.out.println("| 6 - Busca Best First                            |");
-			System.out.println("| 7 - Sair              						  |");
+			System.out.println("| 7 - Busca Local                                 |");
+			System.out.println("| 8 - Sair              						  |");
 			System.out.println("+-------------------------------------------------+");
 			System.out.println();
 			System.out.print("Digite uma opção: ");
 
 			int opcao = menu.nextInt();
 
-			if (opcao == 7) break;
+			if (opcao == 8) break;
 
 			switch (opcao) {
 				case 1:
@@ -85,11 +88,24 @@ public class Main {
 					buscaBestFirst(puzzleInicial, puzzleFinal);
 					break;
 
+				case 7:
+					buscaLocal(puzzleInicial, puzzleFinal);
+					break;
+
 				default:
 					System.out.print("\nOpção Inválida\n\n");
 					break;
 			}
 		}
+	}
+
+	private static void buscaLocal(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal) {
+		HillClimbing hillClimbing = new HillClimbing();
+		hillClimbing.setInicio(puzzleInicial);
+		hillClimbing.setObjetivo(puzzleFinal);
+		hillClimbing.buscar();
+
+		printCaminho(hillClimbing.getCaminhoSolucao());
 	}
 
 	private static void buscaEmProfundidadeLimitada(Puzzle8 puzzleInicial, Puzzle8 puzzleFinal, int limite) {
